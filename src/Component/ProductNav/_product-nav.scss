@@ -1,0 +1,21 @@
+@import "../../style/sass/mixin";
+
+@include reset-style-a-li;
+.product-card {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 0.6em;
+  box-shadow: 3px 1px 14px 0px lightgray;
+
+  .product-img-container {
+    img {
+      border-radius: 0.4em;
+    }
+  }
+
+  .product-rating{
+    font-size: smaller;
+    color:gold;
+    font-weight:100 ;
+  }
+}

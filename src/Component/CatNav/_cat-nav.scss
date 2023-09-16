@@ -1,0 +1,38 @@
+@import '../../style/sass/Variable';
+
+@import '../../style//sass/mixin';
+
+.cat-nav-container {
+  background-color: #1e1e1e;
+  max-width: 100%;
+  border-top: #444444 1px solid;
+
+  .cat-list-items {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0.3em;
+    padding: 0.4em;
+    height: 2.5em;
+    a {
+      text-decoration: none;
+      color: white;
+
+      &::after {
+        content: "";
+        background-color: $accent-color;
+        height: 0.1em;
+        display: block;
+        bottom: 0;
+        left: 0;
+        transform: scaleX(0);
+        @include transition(transform, 0.2s);
+      }
+
+      &:hover {
+        &::after {
+          transform: scaleX(1.1);
+        }
+      }
+    }
+  }
+}
