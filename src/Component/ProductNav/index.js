@@ -1,15 +1,10 @@
 import React from "react";
 import "./_product-nav.scss";
+import { useSelector } from "react-redux";
+import productSlice from "../../Redux/Product/productSlice";
 
 const ProductNav = () => {
-  const productData = [
-    { pName: "Coat", pPrice: 1999.0, img: "shop-1.jpg" },
-    { pName: "Purse", pPrice: 1999.0, img: "shop-2.jpg" },
-    { pName: "Jacket", pPrice: 1999.0, img: "shop-3.jpg" },
-    { pName: "Wallet", pPrice: 1999.0, img: "shop-4.jpg" },
-    { pName: "Umbrella", pPrice: 1999.0, img: "shop-5.jpg" },
-    { pName: "Mobile", pPrice: 1999.0, img: "shop-6.jpg" },
-  ];
+  const productData = useSelector(productSlice.getInitialState);
   return (
     <div className="d-flex flex-wrap justify-content-center">
       {productData.map((product, key) => {
