@@ -12,9 +12,9 @@ const SideNav = () => {
       </div>
 
       <div className="accordion">
-        {accordionData.map((categoryData) => {
+        {accordionData.map((categoryData, key) => {
           return (
-            <div className="accordion-item individual-accordion-item">
+            <div key={key} className="accordion-item individual-accordion-item">
               <div className="accordion-header">
                 <button
                   className="accordion-button"
@@ -32,9 +32,9 @@ const SideNav = () => {
               >
                 <div className="accordion-body">
                   <ul>
-                    {categoryData.subCategory.map((items) => {
+                    {categoryData.subCategory.map((items, key) => {
                       return (
-                        <li className="sub-items">
+                        <li key={key} className="sub-items">
                           <a href="#">{items}</a>
                         </li>
                       );

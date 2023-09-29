@@ -18,4 +18,24 @@
     color:gold;
     font-weight:100 ;
   }
+
+  .addtoCart-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    &:hover{
+      box-shadow: inset 1px 2px 5px gainsboro;
+      cursor: pointer;
+    }
+       i{
+        font-size: large;
+        font-weight: 900;
+       }
+       p{
+        font-size: large;
+        font-weight: 600;
+       }
+ 
+  }
 }

@@ -78,3 +78,20 @@
   list-style-type: none;
   font-size: 1.2em;
 }
+
+.shop-cart-qty{
+  position:absolute;
+  left:94%;
+  top: 4%;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 50%;
+  background-color: gold;
+  text-align: center;
+
+}
+
+.shop-cart-qty p{
+  color: black;
+  font-weight: 600;
+}

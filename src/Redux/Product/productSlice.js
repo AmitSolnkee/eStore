@@ -1,47 +1,28 @@
-const { createSlice } = require("@reduxjs/toolkit");
-
-const initialState = [
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-1.jpg",
-  },
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-2.jpg",
-  },
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-3.jpg",
-  },
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-4.jpg",
-  },
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-5.jpg",
-  },
-  {
-    id: 1,
-    pName: "Coat",
-    pPrice: 2699,
-    img: "shop-6.jpg",
-  },
-];
+import { getProduct } from "./action";
+import { createSlice } from "@reduxjs/toolkit";
 
 const productSlice = createSlice({
   name: "ProductSlice",
-  initialState: initialState,
+  initialState: {
+    product: [],
+    status: "idle",
+    err: "",
+  },
+
+  reducers: {},
+  extraReducers: {
+    [getProduct.pending]: (state, action) => {
+      state.status = "Loading";
+    },
+    [getProduct.fulfilled]: (state, action) => {
+      state.status = "Success";
+      state.product = action.payload;
+    },
+    [getProduct.rejected]: (state, action) => {
+      state.status = "Failed";
+      state.err = action.error.message;
+    },
+  },
 });
 
-export default productSlice;
+export default productSlice.reducer;
