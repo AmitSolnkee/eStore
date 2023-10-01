@@ -1,15 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const totalCartItems = useSelector((state) => state.cartReducer.totalQty);
-
+  const navigate = useNavigate();
   return (
     <div>
       <div className="header bg-dark">
         <div className="row nav-content">
-          <div className="brand my-1">
+          <div className="brand my-1" onClick={() => navigate("/")}>
             <h1>eStore</h1>
           </div>
           <div className="inp-container w-50 h-25 my-4 p-0">
@@ -33,7 +33,7 @@ export const Header = () => {
             </h5>
             /
             <h5>
-              <a href="#">Register</a>
+              <Link to="/register">Register</Link>
             </h5>
           </div>
 

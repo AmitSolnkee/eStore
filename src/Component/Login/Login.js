@@ -1,7 +1,10 @@
 import React from "react";
 import "./_login_form.scss";
+import { useSelector } from "react-redux";
 
 const Login = () => {
+  const loginUser = useSelector(state => state.loginReducer)
+  console.log('loginUser',loginUser)
   return (
     <div className="container login-box p-5 pb-1 mt-5">
       <div className="text-center mt-2">
