@@ -11,25 +11,31 @@ import {
 } from "../../Validation/validations";
 
 const Register = () => {
-  const navigate = useNavigate();
-  const [otp, setOtp] = useState("");
-  const [userDet, setUserDet] = useState({
+  const initialUserState = {
     fullname: "",
     emailid: "",
     password: "",
     mobNumber: "",
     sentOtp: false,
     otpApproved: false,
-  });
-
-  const [mflag, setmflag] = useState(false);
-  const [validate, setValidate] = useState({
+  };
+  const initialValidateState = {
     fullname: "",
     vemail: "",
     vpassword: "",
     vmobile: "",
     otpVerification: "",
-  });
+  };
+  const navigate = useNavigate();
+  const [otp, setOtp] = useState("");
+
+  const [userDet, setUserDet] = useState(initialUserState);
+  const [isLoading, setisLoading] = useState(false);
+  const [validate, setValidate] = useState(initialValidateState);
+
+  const resetValidateState = () => {
+    setValidate(initialValidateState);
+  };
 
   const handleChange = (otpValue) => {
     setOtp(otpValue);
@@ -57,43 +63,70 @@ const Register = () => {
         .post("http://localhost:5001/otp-verification", { otp: otp })
         .then((res) => {
           if (res.data === "approved") {
-            setUserDet({ ...userDet, sentOtp: false, otpApproved: true });
+            setUserDet({
+              ...userDet,
+              sentOtp: false,
+              otpApproved: true,
+            });
           }
         });
     } catch (error) {}
   };
   const registerUser = async () => {
-    setmflag(!mflag);
-    if (mflag) {
-      if (!isFullnameValid(userDet.fullname))
-        return setValidate({
+    try {
+      if (isLoading) {
+        return;
+      }
+      setisLoading(true);
+
+      const { fullname, emailid, password, mobNumber, otpApproved } = userDet;
+
+      // Validation for different inputs
+      if (!isFullnameValid(fullname)) {
+        setValidate({ ...validate, fullname: "fullname cannot be empty" });
+        return;
+      }
+
+      if (!isEmailValid(emailid)) {
+        setValidate({ ...validate, vemail: "Email not valid" });
+        return;
+      }
+
+      if (!isPasswordValid(password)) {
+        setValidate({
           ...validate,
-          fullname: "fullname cannot be empty",
+          vpassword: "password should have at least 8 characters",
         });
-      if (!isEmailValid(userDet.emailid))
-        return setValidate({ ...validate, vemail: "Email not valid" });
-      if (!isPasswordValid(userDet.password))
-        return setValidate({
-          ...validate,
-          vpassword: "password should have atleast 8 character",
-        });
-      if (!isMobileNumberValid(userDet.mobNumber))
-        return setValidate({ ...validate, vmobile: "only 10 numbers allowed" });
-      if (userDet.otpApproved) {
-        await axios
-          .post("http://localhost:5001/registeruser", {
-            fullname: userDet.fullname,
-            emailid: userDet.emailid,
-            password: userDet.password,
-            mobNumber: userDet.mobNumber,
-          })
-          .then((response) => console.log("user registration", response));
-      } else {
+        return;
+      }
+
+      if (!isMobileNumberValid(mobNumber)) {
+        setValidate({ ...validate, vmobile: "only 10 numbers allowed" });
+        return;
+      }
+
+      if (!otpApproved) {
         setValidate({
           ...validate,
           otpVerification: "Mobile number not verified",
         });
+        return;
       }
+      resetValidateState(); //this will reset all state values of errors
+
+      //  Post req sent for registering user in database
+      await axios
+        .post("http://localhost:5001/register-user", {
+          fullname,
+          emailid,
+          password,
+          mobNumber,
+        })
+        .then((response) => console.log("user registration", response));
+    } catch (error) {
+      console.error("Error while registering user", error);
+    } finally {
+      setisLoading(false);
     }
   };
   return (
@@ -153,14 +186,20 @@ const Register = () => {
         />
         <br />
         <span className="text-end text-danger fw-light">
-          { validate.otpVerification !== "" ? validate.otpVerification :validate.vmobile}
+          {validate.otpVerification !== ""
+            ? validate.otpVerification
+            : validate.vmobile}
         </span>
         <p
           className=" send-otp fw-bold text-success text-end "
           onClick={sendOtpReq}
         >
           {userDet.otpApproved ? (
-            <span className="text-success fw-bold">Mobile number verified</span>
+            <span className="text-success fw-normal">
+              Mobile number verified
+            </span>
+          ) : userDet.sentOtp ? (
+            "otp sent"
           ) : (
             "send otp"
           )}
@@ -186,7 +225,9 @@ const Register = () => {
         )}
       </div>
       <div className="mt-4">
-        <button onClick={registerUser}>Register</button>
+        <button onClick={registerUser}>
+          {isLoading ? "Loading..." : "Register"}
+        </button>
         <p className="fw-light text-center mt-2">
           Already have an account?
           <span onClick={() => navigate("/login")} className="fw-bold">
